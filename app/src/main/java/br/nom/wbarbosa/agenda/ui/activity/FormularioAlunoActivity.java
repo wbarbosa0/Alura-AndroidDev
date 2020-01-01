@@ -13,13 +13,15 @@ import br.nom.wbarbosa.R;
 import br.nom.wbarbosa.agenda.dao.AlunoDAO;
 import br.nom.wbarbosa.agenda.model.Aluno;
 
-public class FormularioAlunoActivity extends AppCompatActivity {
+public class FormularioAlunoActivity extends AppCompatActivity implements ConstantActivities {
+
+    public static final String EDITAR_ALUNO = "Editar Aluno";
+    public static final String NOVO_ALUNO = "Novo Aluno";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_formulario_aluno);
-        setTitle("Novo Aluno");
 
         final AlunoDAO dao = new AlunoDAO();
         final Aluno aluno;
@@ -32,13 +34,12 @@ public class FormularioAlunoActivity extends AppCompatActivity {
 
         final Intent intent = getIntent();
 
-        if (intent.hasExtra("aluno")) {
-            aluno = (Aluno) intent.getSerializableExtra("aluno");
-
-            campoNome.setText(aluno.getNome());
-            campoTelefone.setText(aluno.getTelefone());
-            campoEmail.setText(aluno.getEmail());
+        if (intent.hasExtra(CHAVE_EXTRA_ALUNO)) {
+            setTitle(EDITAR_ALUNO);
+            aluno = (Aluno) intent.getSerializableExtra(CHAVE_EXTRA_ALUNO);
+            AtualizarCamposForm(aluno, campoNome, campoTelefone, campoEmail);
         } else {
+            setTitle(NOVO_ALUNO);
             aluno = new Aluno();
         }
 
@@ -46,9 +47,7 @@ public class FormularioAlunoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                aluno.setNome(campoNome.getText().toString());
-                aluno.setTelefone(campoTelefone.getText().toString());
-                aluno.setEmail(campoEmail.getText().toString());
+                AtualizarAluno(aluno, campoNome, campoTelefone, campoEmail);
 
                 if (!aluno.toString().isEmpty()) {
                     if (!aluno.temIdValido()) {
@@ -62,5 +61,17 @@ public class FormularioAlunoActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void AtualizarCamposForm(Aluno aluno, EditText campoNome, EditText campoTelefone, EditText campoEmail) {
+        campoNome.setText(aluno.getNome());
+        campoTelefone.setText(aluno.getTelefone());
+        campoEmail.setText(aluno.getEmail());
+    }
+
+    private void AtualizarAluno(Aluno aluno, EditText campoNome, EditText campoTelefone, EditText campoEmail) {
+        aluno.setNome(campoNome.getText().toString());
+        aluno.setTelefone(campoTelefone.getText().toString());
+        aluno.setEmail(campoEmail.getText().toString());
     }
 }

@@ -16,7 +16,8 @@ import br.nom.wbarbosa.R;
 import br.nom.wbarbosa.agenda.dao.AlunoDAO;
 import br.nom.wbarbosa.agenda.model.Aluno;
 
-public class ListaAlunosActivity extends AppCompatActivity {
+
+public class ListaAlunosActivity extends AppCompatActivity implements ConstantActivities {
 
     private final static AlunoDAO alunoDAO = new AlunoDAO();
     FloatingActionButton fabNovoAluno;
@@ -41,9 +42,9 @@ public class ListaAlunosActivity extends AppCompatActivity {
         fabNovoAluno.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (intent.hasExtra("aluno")) {
+                if (intent.hasExtra(CHAVE_EXTRA_ALUNO)) {
                     Log.i("INSERT", "onClick: Tinha EXTRA!");
-                    intent.removeExtra("aluno");
+                    intent.removeExtra(CHAVE_EXTRA_ALUNO);
                 }
                 startActivity(intent);
 
@@ -54,7 +55,7 @@ public class ListaAlunosActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.i("Click on List", "onItemClick: " + position + "/" + id);
-                intent.putExtra("aluno", dao.todos().get(position));
+                intent.putExtra(CHAVE_EXTRA_ALUNO, dao.todos().get(position));
                 startActivity(intent);
 
             }
