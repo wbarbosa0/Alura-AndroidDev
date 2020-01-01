@@ -1,12 +1,14 @@
 package br.nom.wbarbosa.agenda.ui.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -17,6 +19,9 @@ import br.nom.wbarbosa.agenda.model.Aluno;
 public class ListaAlunosActivity extends AppCompatActivity {
 
     private final static AlunoDAO alunoDAO = new AlunoDAO();
+    FloatingActionButton fabNovoAluno;
+    ListView lvAlunos;
+    AlunoDAO dao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,24 +30,52 @@ public class ListaAlunosActivity extends AppCompatActivity {
         setTitle("Lista de alunos");
         //Toast.makeText(this, "Oie!", Toast.LENGTH_LONG).show();
 
-        FloatingActionButton fabNovoAluno = findViewById(R.id.activity_lista_alunos_novo_aluno);
+        fabNovoAluno = findViewById(R.id.activity_lista_alunos_novo_aluno);
+        lvAlunos = findViewById(R.id.activity_lista_alunos_lista);
+        dao = new AlunoDAO();
+
+        AdicionarDadosExemploNoDAO();
+
+        final Intent intent = new Intent(ListaAlunosActivity.this, FormularioAlunoActivity.class);
 
         fabNovoAluno.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ListaAlunosActivity.this,
-                        FormularioAlunoActivity.class));
+                if (intent.hasExtra("aluno")) {
+                    Log.i("INSERT", "onClick: Tinha EXTRA!");
+                    intent.removeExtra("aluno");
+                }
+                startActivity(intent);
+
             }
         });
+
+        lvAlunos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.i("Click on List", "onItemClick: " + position + "/" + id);
+                intent.putExtra("aluno", dao.todos().get(position));
+                startActivity(intent);
+
+            }
+        });
+    }
+
+    private void AdicionarDadosExemploNoDAO() {
+        Aluno a;
+        a = new Aluno("Huguinho", "555-0123", "hugh.duck@disney.com");
+        dao.salvar(a);
+        a = new Aluno("Zezinho", "555-9634", "dewey.duck@disney.com");
+        dao.salvar(a);
+        a = new Aluno("Luisinho", "555-7208", "louie.duck@disney.com");
+        dao.salvar(a);
+        a = new Aluno("Donald", "555-4313", "donald.duck@disney.com");
+        dao.salvar(a);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-        AlunoDAO dao = new AlunoDAO();
-
-        ListView lvAlunos = findViewById(R.id.activity_lista_alunos_lista);
 
         lvAlunos.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, dao.todos()));
     }
