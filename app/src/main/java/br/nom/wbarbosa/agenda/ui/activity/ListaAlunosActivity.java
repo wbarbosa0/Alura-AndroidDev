@@ -7,7 +7,6 @@ import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
@@ -18,6 +17,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import br.nom.wbarbosa.R;
 import br.nom.wbarbosa.agenda.dao.AlunoDAO;
 import br.nom.wbarbosa.agenda.model.Aluno;
+import br.nom.wbarbosa.agenda.ui.adapter.ListaAlunosAdapter;
 
 
 public class ListaAlunosActivity<adapterLV> extends AppCompatActivity implements ConstantActivities {
@@ -27,7 +27,8 @@ public class ListaAlunosActivity<adapterLV> extends AppCompatActivity implements
     FloatingActionButton fabNovoAluno;
     ListView lvAlunos;
     AlunoDAO dao;
-    private ArrayAdapter<Aluno> adapterLV;
+    //private ArrayAdapter<Aluno> adapterLV;
+    private ListaAlunosAdapter adapterLV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,8 +78,10 @@ public class ListaAlunosActivity<adapterLV> extends AppCompatActivity implements
             }
         });
 
-        adapterLV = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, dao.todos());
-        lvAlunos.setAdapter(adapterLV);
+        //adapterLV = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, dao.todos());
+        //lvAlunos.setAdapter(adapterLV);
+        adapterLV = new ListaAlunosAdapter(this);
+        lvAlunos.setAdapter(this.adapterLV);
     }
 
     private void configuraFAB(final Intent intent) {
@@ -110,7 +113,6 @@ public class ListaAlunosActivity<adapterLV> extends AppCompatActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-        adapterLV.clear();
-        adapterLV.addAll(dao.todos());
+        adapterLV.atualiza(dao.todos());
     }
 }
