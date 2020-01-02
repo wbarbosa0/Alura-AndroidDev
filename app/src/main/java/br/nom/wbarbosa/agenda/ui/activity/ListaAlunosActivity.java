@@ -16,7 +16,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import br.nom.wbarbosa.R;
 import br.nom.wbarbosa.agenda.dao.AlunoDAO;
-import br.nom.wbarbosa.agenda.model.Aluno;
 import br.nom.wbarbosa.agenda.ui.adapter.ListaAlunosAdapter;
 
 
@@ -27,7 +26,6 @@ public class ListaAlunosActivity<adapterLV> extends AppCompatActivity implements
     FloatingActionButton fabNovoAluno;
     ListView lvAlunos;
     AlunoDAO dao;
-    //private ArrayAdapter<Aluno> adapterLV;
     private ListaAlunosAdapter adapterLV;
 
     @Override
@@ -41,7 +39,6 @@ public class ListaAlunosActivity<adapterLV> extends AppCompatActivity implements
         dao = new AlunoDAO();
         final Intent intent = new Intent(ListaAlunosActivity.this, FormularioAlunoActivity.class);
 
-        AdicionarDadosExemploNoDAO();
 
         configuraFAB(intent);
         configuraListView(intent);
@@ -78,8 +75,6 @@ public class ListaAlunosActivity<adapterLV> extends AppCompatActivity implements
             }
         });
 
-        //adapterLV = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, dao.todos());
-        //lvAlunos.setAdapter(adapterLV);
         adapterLV = new ListaAlunosAdapter(this);
         lvAlunos.setAdapter(this.adapterLV);
     }
@@ -98,17 +93,6 @@ public class ListaAlunosActivity<adapterLV> extends AppCompatActivity implements
         });
     }
 
-    private void AdicionarDadosExemploNoDAO() {
-        Aluno a;
-        a = new Aluno("Huguinho", "555-0123", "hugh.duck@disney.com");
-        dao.salvar(a);
-        a = new Aluno("Zezinho", "555-9634", "dewey.duck@disney.com");
-        dao.salvar(a);
-        a = new Aluno("Luisinho", "555-7208", "louie.duck@disney.com");
-        dao.salvar(a);
-        a = new Aluno("Donald", "555-4313", "donald.duck@disney.com");
-        dao.salvar(a);
-    }
 
     @Override
     protected void onResume() {
