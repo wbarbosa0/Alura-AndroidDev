@@ -35,4 +35,17 @@ public class AlunoDAO {
             }
         }
     }
+
+    public void remover(Aluno aluno) {
+        for (Aluno a : alunos
+        ) {
+            if (a.getId() == aluno.getId()) {
+                int posicao = alunos.indexOf(a);
+                Log.i("DELETE", "excluir: " + posicao);
+                alunos.remove(a);
+                break;
+            }
+        }
+
+    }
 }
