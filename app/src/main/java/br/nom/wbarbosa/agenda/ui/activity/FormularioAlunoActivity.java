@@ -2,11 +2,12 @@ package br.nom.wbarbosa.agenda.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import br.nom.wbarbosa.R;
@@ -17,19 +18,49 @@ public class FormularioAlunoActivity extends AppCompatActivity implements Consta
 
     public static final String EDITAR_ALUNO = "Editar Aluno";
     public static final String NOVO_ALUNO = "Novo Aluno";
+    final AlunoDAO dao = new AlunoDAO();
+    Aluno aluno;
+
+    //Button botaoSalvar;
+    EditText campoNome;
+    EditText campoTelefone;
+    EditText campoEmail;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_formulario_aluno_salvar, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.activity_lista_aluno_menu_salvar) {
+            AtualizarAluno(aluno, campoNome, campoTelefone, campoEmail);
+
+            if (!aluno.toString().isEmpty()) {
+                if (!aluno.temIdValido()) {
+                    dao.salvar(aluno);
+                } else {
+                    dao.atualizar(aluno);
+                }
+                finish();
+            } else {
+                Toast.makeText(FormularioAlunoActivity.this, "Preencha pelo nome do aluno para poder salva-lo!!!", Toast.LENGTH_LONG).show();
+            }
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_formulario_aluno);
 
-        final AlunoDAO dao = new AlunoDAO();
-        final Aluno aluno;
-
-        Button botaoSalvar = findViewById(R.id.activity_formulario_aluno_botao_salvar);
-        final EditText campoNome = findViewById(R.id.activity_formulario_aluno_input_nome);
-        final EditText campoTelefone = findViewById(R.id.activity_formulario_aluno_input_telefone);
-        final EditText campoEmail = findViewById(R.id.activity_formulario_aluno_input_email);
+        //botaoSalvar = findViewById(R.id.activity_formulario_aluno_botao_salvar);
+        campoNome = findViewById(R.id.activity_formulario_aluno_input_nome);
+        campoTelefone = findViewById(R.id.activity_formulario_aluno_input_telefone);
+        campoEmail = findViewById(R.id.activity_formulario_aluno_input_email);
 
 
         final Intent intent = getIntent();
@@ -43,24 +74,6 @@ public class FormularioAlunoActivity extends AppCompatActivity implements Consta
             aluno = new Aluno();
         }
 
-        botaoSalvar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                AtualizarAluno(aluno, campoNome, campoTelefone, campoEmail);
-
-                if (!aluno.toString().isEmpty()) {
-                    if (!aluno.temIdValido()) {
-                        dao.salvar(aluno);
-                    } else {
-                        dao.atualizar(aluno);
-                    }
-                    finish();
-                } else {
-                    Toast.makeText(FormularioAlunoActivity.this, "Preencha pelo nome do aluno para poder salva-lo!!!", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
     }
 
     private void AtualizarCamposForm(Aluno aluno, EditText campoNome, EditText campoTelefone, EditText campoEmail) {
