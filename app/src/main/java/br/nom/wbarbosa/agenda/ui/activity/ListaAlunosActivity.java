@@ -1,5 +1,6 @@
 package br.nom.wbarbosa.agenda.ui.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -39,21 +41,35 @@ public class ListaAlunosActivity<adapterLV> extends AppCompatActivity implements
         dao = new AlunoDAO();
         final Intent intent = new Intent(ListaAlunosActivity.this, FormularioAlunoActivity.class);
 
-
         configuraFAB(intent);
         configuraListView(intent);
+
     }
 
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
-        AdapterView.AdapterContextMenuInfo menuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        final AdapterView.AdapterContextMenuInfo menuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
         if (item.getItemId() == R.id.activity_lista_aluno_menu_remover) {
-            adapterLV.remove(dao.todos().get(menuInfo.position));
-            dao.remover(dao.todos().get(menuInfo.position));
+            confirmarExclusao(menuInfo);
+
         }
 
         return super.onContextItemSelected(item);
+    }
+
+    private void confirmarExclusao(final AdapterView.AdapterContextMenuInfo menuInfo) {
+        new AlertDialog.Builder(this).setTitle("Removendo aluno")
+                .setMessage("Tem certeza que deseja excluir o aluno?")
+                .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        adapterLV.remove(dao.todos().get(menuInfo.position));
+                        dao.remover(dao.todos().get(menuInfo.position));
+                    }
+                })
+                .setNegativeButton("Não", null)
+                .show();
     }
 
     private void configuraListView(final Intent intent) {
