@@ -3,11 +3,14 @@ package br.nom.wbarbosa.agenda.ui.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -43,6 +46,18 @@ public class ListaAlunosActivity<adapterLV> extends AppCompatActivity implements
         configuraListView(intent);
     }
 
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        AdapterView.AdapterContextMenuInfo menuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+
+        if (item.getItemId() == R.id.activity_lista_aluno_menu_remover) {
+            adapterLV.remove(dao.todos().get(menuInfo.position));
+            dao.remover(dao.todos().get(menuInfo.position));
+        }
+
+        return super.onContextItemSelected(item);
+    }
+
     private void configuraListView(final Intent intent) {
         lvAlunos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -54,12 +69,11 @@ public class ListaAlunosActivity<adapterLV> extends AppCompatActivity implements
             }
         });
 
-        lvAlunos.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        registerForContextMenu(lvAlunos);
+        lvAlunos.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                adapterLV.remove(dao.todos().get(position));
-                dao.remover(dao.todos().get(position));
-                return true;
+            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+                getMenuInflater().inflate(R.menu.activity_formulario_aluno_menu, menu);
             }
         });
 
