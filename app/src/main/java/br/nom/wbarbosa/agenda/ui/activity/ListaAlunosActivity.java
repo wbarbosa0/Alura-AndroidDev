@@ -23,11 +23,11 @@ import br.nom.wbarbosa.agenda.ui.adapter.ListaAlunosAdapter;
 
 public class ListaAlunosActivity<adapterLV> extends AppCompatActivity implements ConstantActivities {
 
-    private final static AlunoDAO alunoDAO = new AlunoDAO();
-    public static final String LISTA_DE_ALUNOS = "Lista de alunos";
-    FloatingActionButton fabNovoAluno;
-    ListView lvAlunos;
-    AlunoDAO dao;
+    //private final static AlunoDAO alunoDAO = new AlunoDAO();
+    private static final String LISTA_DE_ALUNOS = "Lista de alunos";
+    private static final AlunoDAO dao = new AlunoDAO();
+    private FloatingActionButton fabNovoAluno;
+    private ListView lvAlunos;
     private ListaAlunosAdapter adapterLV;
 
     @Override
@@ -38,7 +38,7 @@ public class ListaAlunosActivity<adapterLV> extends AppCompatActivity implements
 
         fabNovoAluno = findViewById(R.id.activity_lista_alunos_novo_aluno);
         lvAlunos = findViewById(R.id.activity_lista_alunos_lista);
-        dao = new AlunoDAO();
+        //dao = new AlunoDAO();
         final Intent intent = new Intent(ListaAlunosActivity.this, FormularioAlunoActivity.class);
 
         configuraFAB(intent);

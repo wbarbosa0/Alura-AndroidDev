@@ -4,6 +4,7 @@
     <entry_points version="2.0">
       <entry_point TYPE="field" FQNAME="br.nom.wbarbosa.agenda.model.Aluno email" />
     </entry_points>
+    <pattern value="br.nom.wbarbosa.agenda.app.AgendaApplication" />
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />

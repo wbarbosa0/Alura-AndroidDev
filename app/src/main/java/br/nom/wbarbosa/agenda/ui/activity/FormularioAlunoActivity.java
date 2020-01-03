@@ -16,15 +16,15 @@ import br.nom.wbarbosa.agenda.model.Aluno;
 
 public class FormularioAlunoActivity extends AppCompatActivity implements ConstantActivities {
 
-    public static final String EDITAR_ALUNO = "Editar Aluno";
-    public static final String NOVO_ALUNO = "Novo Aluno";
-    final AlunoDAO dao = new AlunoDAO();
-    Aluno aluno;
+    private static final String EDITAR_ALUNO = "Editar Aluno";
+    private static final String NOVO_ALUNO = "Novo Aluno";
+    private final AlunoDAO dao = new AlunoDAO();
+    private Aluno aluno;
 
     //Button botaoSalvar;
-    EditText campoNome;
-    EditText campoTelefone;
-    EditText campoEmail;
+    private EditText campoNome;
+    private EditText campoTelefone;
+    private EditText campoEmail;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -68,6 +68,7 @@ public class FormularioAlunoActivity extends AppCompatActivity implements Consta
         if (intent.hasExtra(CHAVE_EXTRA_ALUNO)) {
             setTitle(EDITAR_ALUNO);
             aluno = (Aluno) intent.getSerializableExtra(CHAVE_EXTRA_ALUNO);
+            assert aluno != null;
             AtualizarCamposForm(aluno, campoNome, campoTelefone, campoEmail);
         } else {
             setTitle(NOVO_ALUNO);

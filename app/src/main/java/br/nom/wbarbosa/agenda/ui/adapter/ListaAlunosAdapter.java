@@ -15,7 +15,7 @@ import br.nom.wbarbosa.agenda.model.Aluno;
 
 public class ListaAlunosAdapter extends BaseAdapter {
     final private List<Aluno> alunos = new ArrayList<>();
-    private Context context;
+    private final Context context;
 
     public ListaAlunosAdapter(Context context) {
         this.context = context;
